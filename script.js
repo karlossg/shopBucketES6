@@ -1,13 +1,11 @@
-let products = [];
+const products = [];
    
 function addProduct() {
-  let addProductNameInput = document.getElementById('addProductNameInput');
-
-  if (addProductNameInput.value !== '') {
+  if (document.getElementById('addProductNameInput').value) {
     products.push({
-      productName: addProductNameInput.value,
+      productName: document.getElementById('addProductNameInput').value,
     });
-        addProductNameInput.value = '';
+    document.getElementById('addProductNameInput').value = '';
     displayProducts();
     document.getElementById("addProductNameInput").focus();  
   }  
@@ -18,42 +16,32 @@ function deleteProduct(position) {
     displayProducts();
 }
 
-toggleFiltered: function toggleFiltered () {
-  let input = document.getElementById('filterInput');
-      filter = input.value.toUpperCase();
-      ul = document.querySelector('ul');
-      li = ul.getElementsByTagName('li');
-  for (let i = 0, liLength = li.length; i < liLength; i++) {
-    if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = '';
-    } else {
-      li[i].style.display = 'none';
-    }
+function toggleFiltered () { 
+  let filter = document.getElementById('filterInput').value.toUpperCase();
+      li = document.querySelector('ul').getElementsByTagName('li');
+  for (let value of li) {
+    value.style.display = value.innerHTML.toUpperCase().indexOf(filter) > -1 ? '' : 'none'
   }
 }
 
 function displayProducts() {
-  let elementFilter = document.querySelector('.filterProduct');
-      elementPrint = document.querySelector('.printButton');   
-      productsul = document.querySelector('ul');
-  productsul.innerHTML = '';
+  document.querySelector('ul').innerHTML = '';
   
   products.forEach(function(product, position) {
     let productLi = document.createElement('li');
     productLi.textContent = product.productName;
     productLi.appendChild(createDeleteButton())
-    productsul.appendChild(productLi);
+    document.querySelector('ul').appendChild(productLi);
   })
 
   if (products.length) {
-    elementFilter.style.visibility = 'visible';
-    elementPrint.style.visibility = 'visible';
+    document.querySelector('.filterProduct').style.visibility = 'visible';
+    document.querySelector('.printButton').style.visibility = 'visible';
   } else {
-    elementFilter.style.visibility = 'hidden';
-    elementPrint.style.visibility = 'hidden';
+    document.querySelector('.filterProduct').style.visibility = 'hidden';
+    document.querySelector('.printButton').style.visibility = 'hidden';
   }
 }
-
 
 function createDeleteButton() {
     let deleteButton = document.createElement('button');
@@ -63,20 +51,17 @@ function createDeleteButton() {
 }
 
 function printList() {
-    let hideElement = document.querySelectorAll('.hide');  
-        hidePrintButton = document.querySelector('.printButton');
-        showElement = document.querySelectorAll('.show');  
-        showPrintButton = document.querySelector('.printButton');
-    hidePrintButton.style.visibility = 'hidden';
-    for (let i = 0, length = hideElement.length; i < length; i++) {
-      hideElement[i].style.display = 'none';
+    document.querySelector('.printButton').style.visibility = 'hidden';
+
+    for (let value of document.querySelectorAll('.hide')) {
+      value.style.display = 'none';
     } 
-  
+
     window.print();
-    
-    showPrintButton.style.visibility = 'visible';
-    for (let i = 0, length = showElement.length; i < length; i++) {
-      showElement[i].style.display = 'inline';
+    document.querySelector('.printButton').style.visibility = 'visible';
+
+    for (let value of document.querySelectorAll('.show')) {
+      value.style.display = 'inline';
     }
   }
 
@@ -86,20 +71,17 @@ function printList() {
     if (event.keyCode == 13) {
       document.getElementById("add").click();
     }
-  });
+  })
   
   document.getElementById("add")
-  .addEventListener("click", function (event) {
-    addProduct();
-  });
-  
+  .addEventListener("click", () => addProduct())
+
   document.getElementById("filterInput")
-  .addEventListener("keyup", function (event) {
-    toggleFiltered();
-  });
+  .addEventListener('keyup', () => toggleFiltered())
+
   document.querySelector('ul').addEventListener('click', function(event) {
     let elementClicked = event.target;
       if (elementClicked.className === 'deleteButton hide show') {
         deleteProduct(parseInt(elementClicked.parentNode.id));
       }
-  });  
+  })
