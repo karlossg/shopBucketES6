@@ -1,66 +1,75 @@
 const products = [];
    
 function addProduct() {
-  if (document.getElementById('addProductNameInput').value) {
+  const addProductNameInput = document.getElementById('addProductNameInput');
+
+  if (addProductNameInput.value) {
     products.push({
-      productName: document.getElementById('addProductNameInput').value,
+      productName: addProductNameInput.value,
     });
-    document.getElementById('addProductNameInput').value = '';
+    addProductNameInput.value = '';
     displayProducts();
-    document.getElementById("addProductNameInput").focus();  
+    addProductNameInput.focus();  
   }  
 }
 
-function deleteProduct(position) {
+function deconsteProduct(position) {
     products.splice(position, 1);
     displayProducts();
 }
 
 function toggleFiltered () { 
-  let filter = document.getElementById('filterInput').value.toUpperCase();
-      li = document.querySelector('ul').getElementsByTagName('li');
-  for (let value of li) {
+  const filter = document.getElementById('filterInput').value.toUpperCase();
+  const li = document.querySelector('ul').getElementsByTagName('li');
+  for (const value of li) {
     value.style.display = value.innerHTML.toUpperCase().indexOf(filter) > -1 ? '' : 'none'
   }
 }
 
 function displayProducts() {
-  document.querySelector('ul').innerHTML = '';
+  const elementFilter = document.querySelector('.filterProduct');
+  const elementPrint = document.querySelector('.printButton');   
+  const productsUl = document.querySelector('ul');
+  productsUl.innerHTML = '';
   
   products.forEach(function(product, position) {
-    let productLi = document.createElement('li');
+    const productLi = document.createElement('li');
     productLi.textContent = product.productName;
-    productLi.appendChild(createDeleteButton())
-    document.querySelector('ul').appendChild(productLi);
+    productLi.appendChild(createDeconsteButton())
+    productsUl.appendChild(productLi);
   })
 
   if (products.length) {
-    document.querySelector('.filterProduct').style.visibility = 'visible';
-    document.querySelector('.printButton').style.visibility = 'visible';
+    elementFilter.style.visibility = 'visible';
+    elementPrint.style.visibility = 'visible';
   } else {
-    document.querySelector('.filterProduct').style.visibility = 'hidden';
-    document.querySelector('.printButton').style.visibility = 'hidden';
+    elementFilter.style.visibility = 'hidden';
+    elementPrint.style.visibility = 'hidden';
   }
 }
 
-function createDeleteButton() {
-    let deleteButton = document.createElement('button');
-    deleteButton.textContent = 'X';
-    deleteButton.className = 'deleteButton hide show';
-    return deleteButton;
+function createDeconsteButton() {
+  const deconsteButton = document.createElement('button');
+  deconsteButton.textContent = 'X';
+  deconsteButton.className = 'deconsteButton hide show';
+  return deconsteButton;
 }
 
 function printList() {
-    document.querySelector('.printButton').style.visibility = 'hidden';
+  const hideElement = document.querySelectorAll('.hide');  
+  const hidePrintButton = document.querySelector('.printButton');
+  const showElement = document.querySelectorAll('.show');  
+  const showPrintButton = document.querySelector('.printButton');
+  hidePrintButton.style.visibility = 'hidden';
 
-    for (let value of document.querySelectorAll('.hide')) {
+    for (const value of hideElement) {
       value.style.display = 'none';
     } 
 
     window.print();
-    document.querySelector('.printButton').style.visibility = 'visible';
+    showPrintButton.style.visibility = 'visible';
 
-    for (let value of document.querySelectorAll('.show')) {
+    for (const value of showElement) {
       value.style.display = 'inline';
     }
   }
@@ -80,8 +89,8 @@ function printList() {
   .addEventListener('keyup', () => toggleFiltered())
 
   document.querySelector('ul').addEventListener('click', function(event) {
-    let elementClicked = event.target;
-      if (elementClicked.className === 'deleteButton hide show') {
-        deleteProduct(parseInt(elementClicked.parentNode.id));
+    const elementClicked = event.target;
+      if (elementClicked.className === 'deconsteButton hide show') {
+        deconsteProduct(parseInt(elementClicked.parentNode.id));
       }
   })
