@@ -1,7 +1,7 @@
 const products = [];
    
 function addProduct() {
-  const addProductNameInput = document.getElementById('addProductNameInput');
+  let addProductNameInput = document.getElementById('addProductNameInput');
 
   if (addProductNameInput.value) {
     products.push({
@@ -13,7 +13,7 @@ function addProduct() {
   }  
 }
 
-function deconsteProduct(position) {
+function deleteProduct(position) {
     products.splice(position, 1);
     displayProducts();
 }
@@ -21,7 +21,7 @@ function deconsteProduct(position) {
 function toggleFiltered () { 
   const filter = document.getElementById('filterInput').value.toUpperCase();
   const li = document.querySelector('ul').getElementsByTagName('li');
-  for (const value of li) {
+  for (let value of li) {
     value.style.display = value.innerHTML.toUpperCase().indexOf(filter) > -1 ? '' : 'none'
   }
 }
@@ -35,7 +35,7 @@ function displayProducts() {
   products.forEach(function(product, position) {
     const productLi = document.createElement('li');
     productLi.textContent = product.productName;
-    productLi.appendChild(createDeconsteButton())
+    productLi.appendChild(createDeleteButton())
     productsUl.appendChild(productLi);
   })
 
@@ -48,11 +48,11 @@ function displayProducts() {
   }
 }
 
-function createDeconsteButton() {
-  const deconsteButton = document.createElement('button');
-  deconsteButton.textContent = 'X';
-  deconsteButton.className = 'deconsteButton hide show';
-  return deconsteButton;
+function createDeleteButton() {
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'X';
+  deleteButton.className = 'deleteButton hide show';
+  return deleteButton;
 }
 
 function printList() {
@@ -62,14 +62,14 @@ function printList() {
   const showPrintButton = document.querySelector('.printButton');
   hidePrintButton.style.visibility = 'hidden';
 
-    for (const value of hideElement) {
+    for (let value of hideElement) {
       value.style.display = 'none';
     } 
 
     window.print();
     showPrintButton.style.visibility = 'visible';
 
-    for (const value of showElement) {
+    for (let value of showElement) {
       value.style.display = 'inline';
     }
   }
@@ -90,7 +90,7 @@ function printList() {
 
   document.querySelector('ul').addEventListener('click', function(event) {
     const elementClicked = event.target;
-      if (elementClicked.className === 'deconsteButton hide show') {
-        deconsteProduct(parseInt(elementClicked.parentNode.id));
+      if (elementClicked.className === 'deleteButton hide show') {
+        deleteProduct(parseInt(elementClicked.parentNode.id));
       }
   })
